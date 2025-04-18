@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okuma Template Selector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the message box */
+        #message-box {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0fdf4;
+            color: #15803d;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #16a34a;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        #message-box.show {
+            display: block;
+        }
+        .image-text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items horizontally */
+            margin-top: 20px; /* Add some space above the container */
+        }
+        .text-below-image {
+            text-align: center;
+            margin-top: 10px;
+            max-width: 80%;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 font-inter antialiased">
+    <div class="container mx-auto p-6 sm:p-10 md:p-12 lg:p-16">
+        <h1 class="text-2xl font-semibold text-blue-600 text-center mb-8">Okuma Template Selector</h1>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="part-width" class="block text-gray-700 text-sm font-bold mb-2">Part Width (inches):</label>
+                    <input type="number" id="part-width" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div>
+                    <label for="part-height" class="block text-gray-700 text-sm font-bold mb-2">Part Height (inches):</label>
+                    <input type="number" id="part-height" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div>
+                    <label for="part-length" class="block text-gray-700 text-sm font-bold mb-2">Part Length (inches):</label>
+                    <input type="number" id="part-length" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="flex items-center">
+                    <label for="oldenburg-check" class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="oldenburg-check" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                        <span class="ml-2 text-gray-700 text-sm font-medium">Is this Oldenburg?</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="image-text-container">
+            <img src="thumbnail_image003.png" alt="Thinnest Section of Part"  style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <p class="text-below-image">
+                When considering the height of the parallel, use the thinnest section of the part, not the overall height. See the image to the right as an example. We would use 3", not 5.5" of the overall height. This would suggest side milling rather than standard facing.
+            </p>
+        </div>
+
+        <div class="flex justify-center mt-8">
+            <button id="calculate-template" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+                Calculate Template
+            </button>
+        </div>
+
+        <div id="result" class="mt-8 bg-white rounded-lg shadow-md p-6 text-center text-lg text-gray-800 font-medium">
+            </div>
+        <div id="message-box" class="hidden">
+                <p id="message-text"></p>
+        </div>
+    </div>
+
+    <script>
+        const partWidthInput = document.getElementById('part-width');
+        const partHeightInput = document.getElementById('part-height');
+        const partLengthInput = document.getElementById('part-length');
+        const oldenburgCheck = document.getElementById('oldenburg-check');
+        const calculateButton = document.getElementById('calculate-template');
+        const resultDiv = document.getElementById('result');
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
+
+        function showMessage(message, type = 'success') {
+            messageText.textContent = message;
+            messageBox.className = `fixed top-4 left-1/2 transform -translate-x-1/2 bg-${type === 'success' ? 'green' : 'red'}-100 text-${type === 'success' ? 'green' : 'red'}-700 border border-${type === 'success' ? 'green' : 'red'}-400 px-4 py-2 rounded shadow-md`;
+            messageBox.classList.add('show');
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        calculateButton.addEventListener('click', () => {
+            const partWidth = parseFloat(partWidthInput.value);
+            const partHeight = parseFloat(partHeightInput.value);
+            const partLength = parseFloat(partLengthInput.value);
+            const oldenburgChecked = oldenburgCheck.checked;
+
+            // Validate inputs
+            if (isNaN(partWidth) || isNaN(partHeight) || isNaN(partLength)) {
+                showMessage("Please enter valid numbers for all dimensions", "error");
+                return;
+            }
+
+            let result = "";
+
+            // Determine classes based on dimensions
+            const widthClass = partWidth >= 3 ? "Wide" : "Narrow";
+            const heightClass = partHeight > 4 ? "Tall" : "Short";
+            const lengthClass = partLength > 36 ? "Long" : "Short";
+
+            if (widthClass === "Wide" && heightClass === "Tall") {
+                result = "Use standard Face Milling - 4\" Face Mill";
+            } else if (widthClass === "Narrow" && heightClass === "Tall") {
+                result = "Use Face Milling, but switch to 3\" Face Mill and change Face Mill Diameter to 3.450\" in parameter table";
+            } else if (heightClass === "Short" && lengthClass === "Long" && partWidth <= 3) {
+                result = oldenburgChecked ? "Program for A Mills" : "Use Side Milling Template";
+            } else if (heightClass === "Short" && lengthClass === "Long" && partWidth > 3) {
+                result = "Use standard Face Milling - 4\" Face Mill";
+            } else {
+                result = "No matching condition";
+            }
+
+            resultDiv.textContent = result;
+            showMessage("Template calculated successfully!", "success");
+        });
+    </script>
+</body>
+</html>
