@@ -123,8 +123,12 @@
             const widthClass = partWidth >= 3 ? "Wide" : "Narrow";
             const heightClass = partHeight > 4 ? "Tall" : "Short";
             const lengthClass = partLength > 36 ? "Long" : "Short";
+            const lengthToHeightRatio = partLength / partHeight;
 
-            if (widthClass === "Wide" && heightClass === "Tall") {
+            // Priority check: Side milling for long thin parts (prevents chatter)
+            if (lengthToHeightRatio >= 4 && partHeight <= 6) {
+                result = oldenburgChecked ? "Program for A Mills" : "Use Side Milling Template";
+            } else if (widthClass === "Wide" && heightClass === "Tall") {
                 result = "Use standard Face Milling - 4\" Face Mill";
             } else if (widthClass === "Narrow" && heightClass === "Tall") {
                 result = "Use Face Milling, but switch to 3\" Face Mill and change Face Mill Diameter to 3.450\" in parameter table";
