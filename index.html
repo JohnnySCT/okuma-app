@@ -4,86 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Okuma Template Selector</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            input: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Custom styles for the message box */
-        #message-box {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #f0fdf4;
-            color: #15803d;
-            padding: 16px;
-            border-radius: 6px;
-            border: 1px solid #16a34a;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+        body {
+            font-family: 'Inter', sans-serif;
         }
-        #message-box.show {
-            display: block;
+        /* Dark mode input styles */
+        .dark input[type="number"] {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
         }
-        .image-text-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Center items horizontally */
-            margin-top: 20px; /* Add some space above the container */
+        .dark input[type="number"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
-        .text-below-image {
-            text-align: center;
-            margin-top: 10px;
-            max-width: 80%;
+        .dark input[type="checkbox"] {
+            background-color: #0f172a;
+            border-color: #334155;
         }
-
+        /* Light mode adjustments */
+        .light input[type="number"] {
+            background-color: #ffffff;
+            border-color: #d1d5db;
+            color: #1f2937;
+        }
+        /* Logo animation */
+        .logo-icon {
+            transition: transform 0.3s ease;
+        }
+        .logo-icon:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-inter antialiased">
-    <div class="container mx-auto p-6 sm:p-10 md:p-12 lg:p-16">
-        <h1 class="text-2xl font-semibold text-blue-600 text-center mb-8">Okuma Template Selector</h1>
+<body class="dark bg-dark-bg min-h-screen antialiased">
+    <div class="container mx-auto p-6 max-w-4xl">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8 pb-4 border-b border-dark-border dark:border-dark-border light:border-gray-200">
+            <div class="flex items-center gap-3">
+                <!-- SCT Logo Icon -->
+                <svg class="logo-icon w-10 h-10 text-cyan-400" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="12" width="32" height="6" rx="1" fill="currentColor" opacity="0.4"/>
+                    <rect x="4" y="20" width="32" height="6" rx="1" fill="currentColor" opacity="0.7"/>
+                    <rect x="4" y="28" width="32" height="6" rx="1" fill="currentColor"/>
+                </svg>
+                <h1 class="text-xl font-semibold text-white dark:text-white light:text-gray-900">
+                    Okuma <span class="text-cyan-400">Template Selector</span>
+                </h1>
+            </div>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="p-2 rounded-lg bg-dark-card dark:bg-dark-card light:bg-gray-100 border border-dark-border dark:border-dark-border light:border-gray-300 hover:bg-slate-600 dark:hover:bg-slate-600 light:hover:bg-gray-200 transition-colors">
+                <svg id="sun-icon" class="w-5 h-5 text-yellow-400 hidden" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                </svg>
+                <svg id="moon-icon" class="w-5 h-5 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </button>
+        </header>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <!-- Input Card -->
+        <div class="bg-dark-card dark:bg-dark-card light:bg-white rounded-xl border border-dark-border dark:border-dark-border light:border-gray-200 p-6 mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="part-width" class="block text-gray-700 text-sm font-bold mb-2">Part Width (inches):</label>
-                    <input type="number" id="part-width" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label for="part-width" class="block text-slate-300 dark:text-slate-300 light:text-gray-700 text-sm font-medium mb-2">Part Width (inches)</label>
+                    <input type="number" id="part-width" class="w-full py-3 px-4 rounded-lg border border-dark-border focus:outline-none focus:border-cyan-500 transition-colors" placeholder="Enter width" required>
                 </div>
                 <div>
-                    <label for="part-height" class="block text-gray-700 text-sm font-bold mb-2">Part Height (inches):</label>
-                    <input type="number" id="part-height" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label for="part-height" class="block text-slate-300 dark:text-slate-300 light:text-gray-700 text-sm font-medium mb-2">Part Height (inches)</label>
+                    <input type="number" id="part-height" class="w-full py-3 px-4 rounded-lg border border-dark-border focus:outline-none focus:border-cyan-500 transition-colors" placeholder="Enter height" required>
                 </div>
                 <div>
-                    <label for="part-length" class="block text-gray-700 text-sm font-bold mb-2">Part Length (inches):</label>
-                    <input type="number" id="part-length" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label for="part-length" class="block text-slate-300 dark:text-slate-300 light:text-gray-700 text-sm font-medium mb-2">Part Length (inches)</label>
+                    <input type="number" id="part-length" class="w-full py-3 px-4 rounded-lg border border-dark-border focus:outline-none focus:border-cyan-500 transition-colors" placeholder="Enter length" required>
                 </div>
                 <div class="flex items-center">
                     <label for="oldenburg-check" class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="oldenburg-check" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <span class="ml-2 text-gray-700 text-sm font-medium">Is this Oldenburg?</span>
+                        <input type="checkbox" id="oldenburg-check" class="w-5 h-5 rounded border-dark-border text-cyan-500 focus:ring-cyan-500 focus:ring-offset-dark-bg">
+                        <span class="ml-3 text-slate-300 dark:text-slate-300 light:text-gray-700 text-sm font-medium">Is this Oldenburg?</span>
                     </label>
                 </div>
             </div>
         </div>
 
-        <div class="image-text-container">
-            <img src="thumbnail_image003.png" alt="Thinnest Section of Part"  style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <p class="text-below-image">
-                When considering the height of the parallel, use the thinnest section of the part, not the overall height. See the image to the right as an example. We would use 3", not 5.5" of the overall height. This would suggest side milling rather than standard facing.
-            </p>
-        </div>
-
-        <div class="flex justify-center mt-8">
-            <button id="calculate-template" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-2 px-6 rounded-full shadow-md focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
+        <!-- Calculate Button -->
+        <div class="flex justify-center mb-6">
+            <button id="calculate-template" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300">
                 Calculate Template
             </button>
         </div>
 
-        <div id="result" class="mt-8 bg-white rounded-lg shadow-md p-6 text-center text-lg text-gray-800 font-medium">
-            </div>
-        <div id="message-box" class="hidden">
-                <p id="message-text"></p>
+        <!-- Result Card -->
+        <div id="result" class="bg-dark-card dark:bg-dark-card light:bg-white rounded-xl border border-dark-border dark:border-dark-border light:border-gray-200 p-6 text-center mb-8">
+            <p class="text-slate-400 dark:text-slate-400 light:text-gray-500 text-lg">Enter dimensions and click Calculate</p>
         </div>
+
+        <!-- Message Toast -->
+        <div id="message-box" class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 hidden">
+            <p id="message-text"></p>
+        </div>
+
+        <!-- Reference Image Section -->
+        <div class="bg-dark-card dark:bg-dark-card light:bg-white rounded-xl border border-dark-border dark:border-dark-border light:border-gray-200 p-6">
+            <h3 class="text-slate-300 dark:text-slate-300 light:text-gray-700 text-sm font-medium mb-4 text-center">Reference Guide</h3>
+            <div class="flex flex-col items-center">
+                <img src="thumbnail_image003.png" alt="Thinnest Section of Part" class="max-w-full h-auto rounded-lg border border-dark-border" style="max-width: 400px;">
+                <p class="text-slate-400 dark:text-slate-400 light:text-gray-500 text-sm text-center mt-4 max-w-lg">
+                    When considering the height of the parallel, use the thinnest section of the part, not the overall height. In this example, we would use 3", not 5.5" of the overall height. This would suggest side milling rather than standard facing.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center">
+            <p class="text-slate-500 text-xs">SCT CAM Tools v1.0</p>
+        </footer>
     </div>
 
     <script>
@@ -95,13 +149,46 @@
         const resultDiv = document.getElementById('result');
         const messageBox = document.getElementById('message-box');
         const messageText = document.getElementById('message-text');
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const body = document.body;
+
+        // Theme toggle functionality
+        function setDarkMode(isDark) {
+            if (isDark) {
+                body.classList.add('dark', 'bg-dark-bg');
+                body.classList.remove('light', 'bg-gray-100');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                body.classList.remove('dark', 'bg-dark-bg');
+                body.classList.add('light', 'bg-gray-100');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Initialize theme (default to dark)
+        const savedTheme = localStorage.getItem('darkMode');
+        setDarkMode(savedTheme === null ? true : savedTheme === 'true');
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark');
+            setDarkMode(!isDark);
+        });
 
         function showMessage(message, type = 'success') {
             messageText.textContent = message;
-            messageBox.className = `fixed top-4 left-1/2 transform -translate-x-1/2 bg-${type === 'success' ? 'green' : 'red'}-100 text-${type === 'success' ? 'green' : 'red'}-700 border border-${type === 'success' ? 'green' : 'red'}-400 px-4 py-2 rounded shadow-md`;
-            messageBox.classList.add('show');
+            if (type === 'success') {
+                messageBox.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 bg-emerald-500/20 border border-emerald-500/50 text-emerald-400';
+            } else {
+                messageBox.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-50 bg-red-500/20 border border-red-500/50 text-red-400';
+            }
+            messageBox.classList.remove('hidden');
             setTimeout(() => {
-                messageBox.classList.remove('show');
+                messageBox.classList.add('hidden');
             }, 3000);
         }
 
@@ -125,9 +212,15 @@
             const lengthClass = partLength > 36 ? "Long" : "Short";
             const lengthToHeightRatio = partLength / partHeight;
 
-            // Priority check: Side milling for long thin parts (prevents chatter)
-            if (lengthToHeightRatio >= 4 && partHeight <= 6) {
+            // Check for chatter-prone parts (long relative to height, with short height)
+            const chatterProne = lengthToHeightRatio >= 4 && partHeight <= 6;
+
+            if (chatterProne && partWidth <= 3) {
+                // Narrow chatter-prone: Side mill
                 result = oldenburgChecked ? "Program for A Mills" : "Use Side Milling Template";
+            } else if (chatterProne && partWidth > 3) {
+                // Wide chatter-prone: 3" face mill with stepovers (not centerline)
+                result = "Use 3\" Face Mill with stepovers - do not cut down centerline";
             } else if (widthClass === "Wide" && heightClass === "Tall") {
                 result = "Use standard Face Milling - 4\" Face Mill";
             } else if (widthClass === "Narrow" && heightClass === "Tall") {
@@ -140,7 +233,7 @@
                 result = "No matching condition";
             }
 
-            resultDiv.textContent = result;
+            resultDiv.innerHTML = `<p class="text-cyan-400 dark:text-cyan-400 light:text-cyan-600 text-xl font-semibold">${result}</p>`;
             showMessage("Template calculated successfully!", "success");
         });
     </script>
