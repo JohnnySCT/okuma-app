@@ -213,7 +213,7 @@
             const lengthToHeightRatio = partLength / partHeight;
 
             // Check for chatter-prone parts (long relative to height, with short height)
-            const chatterProne = lengthToHeightRatio >= 4 && partHeight <= 6;
+            const chatterProne = lengthToHeightRatio >= 8 && partHeight <= 6;
 
             if (chatterProne && partWidth <= 3) {
                 // Narrow chatter-prone: Side mill
@@ -239,3 +239,4 @@
     </script>
 </body>
 </html>
+
