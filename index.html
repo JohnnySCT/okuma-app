@@ -215,7 +215,10 @@
             // Check for chatter-prone parts (long relative to height, with short height)
             const chatterProne = lengthToHeightRatio >= 8 && partHeight <= 6;
 
-            if (chatterProne && partWidth <= 3) {
+            if (partLength >= 70 && partHeight <= 4 && partWidth <= 1.5) {
+                // Specific check for long, thin rails - Oldenburg takes precedence
+                result = oldenburgChecked ? "Program for A Mills" : "Use the template to rough with 2\" high shear and side-mill finish";
+            } else if (chatterProne && partWidth <= 3) {
                 // Narrow chatter-prone: Side mill
                 result = oldenburgChecked ? "Program for A Mills" : "Use Side Milling Template";
             } else if (chatterProne && partWidth > 3) {
